@@ -7,22 +7,23 @@ users will have to manually open the configuration file and update the value.
 This library makes the task of updating the array easy. You programmatically update 
 the values of the array.
 
-##Installation 
+## Installation 
 
 * Download the library and extract it in a folder of your application. The folder choice depends on your application.
 
 
-##Usage
+## Usage
 * Include the class library to be available for usage `require_once 'class-array-config-writer.php';`
 * Create an instance of  `Array_Config_Writer` class for the file that holds the php array we want to update
-
-    $config_writer = new Array_Config_Writer($config_file, $variable_name , $auto_save );
+```
+$config_writer = new Array_Config_Writer($config_file, $variable_name , $auto_save );
+```
 
 Where :
 
-* **$config_file** (string) : The absolute path to the file where the array is place 
-* **$variable_name** (string) : The variable name of the array we want to update 
-* **$auto_save** (boolean) : Whether to automatically save the changes after the operation
+* **$config_file** (string) : The absolute path to the file where the array is declared. 
+* **$variable_name** (string) : The variable name of the array we want to update. 
+* **$auto_save** (boolean) : Whether to automatically save the changes after the operation.
 
 Supported variable Styles:
 * `Single index $config[ 'key'] = 'value' ;`
@@ -31,19 +32,19 @@ Supported variable Styles:
 You can not use the library to update something like `$config = array( 'key' => 'value' );`
 
 **Notes:** 
-* The library expect the variable to be indexed 
-* The file can have other variables aside our target variable
+* The library expect the variable to be indexed. 
+* The file can have other variables aside our target variable.
 
 
 Now you can start updating the index of the array like this 
 
-    $config_writer->write('key' , value );
+```$config_writer->write('key' , value );```
 
-**Note:** 
-* You can set value to any php variable type 
+**Notes:** 
+* You can set value to any php variable type. 
 * The library treats numeric index as it is. Meaning '21' is different from 21
 
-##Examples
+## Examples
 
 **PHP File** config.php
 
@@ -92,13 +93,19 @@ Now you can start updating the index of the array like this
     $db[ 'username'] =  '';
 ```
 
-Create an instance of the library
+Create an instance of the library:
 
+```
     $config_writer = new Array_Config_Writer( APP_PATH.'config/config.php', 'config' );
-     
-    // update the site name
+```
 
+ Update a config index. The site name for instance:
+ 
+```
     $config_writer->write('site_name' , "New Site Name' );
+```
+Now the file *config.php* should have been updated
+
 
 ## Method chaining 
 
@@ -109,20 +116,32 @@ To update the `'message'` index which has array has value
 
 * First get the current value 
 
-    $meesage = $config['message'];
+```
+$message = $config['message'];
+```
 
-* Then change its value(s) 
+* Then change its value(s)
     
+```
     $message['title'] = 'My New title' ;
     $message['body'] = 'New message body' ;
+```
 
-* Or completely set new array for the message index
-    
-    // assuming the admin sent a form, Just an example, you should validate user post! :d
+* Or completely set new array for the message index.
+```
+    // assuming the admin posted form. Ideally you would validate submission
     $message = $_POST['message'];
+```
 
 * Save it with the library 
 
     $config_writer->write('message' , $message );
+    
+## Testing
+    You need phpunit to run the test cases
+
+    ```
+    phpunit test/Array_Config_Writer_Test.php
+    ```
 
 [Read More](http://hollax.github.io/ArrayConfigWriter)
