@@ -1,6 +1,5 @@
 <?php
-
-require_once dirname(__DIR__).'../class-array-config-writer.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
