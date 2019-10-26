@@ -32,6 +32,9 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
         $this->assertEmpty($this->configWriter->getLastError(), 'Should not have error');
     }
 
+    /**
+     * @covers Array_Config_Writer::getLastError
+     */
     public function testConstructorError()
     {
         $config_writer = new Array_Config_Writer('DummyFile.php');

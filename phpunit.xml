@@ -16,7 +16,7 @@
     </testsuites>
      <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <file suffix=".php">./class-array-config-writer</file>
+            <file >class-array-config-writer.php</file>
         </whitelist>
     </filter>
     <logging>
