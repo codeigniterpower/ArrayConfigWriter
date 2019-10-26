@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/hollax/ArrayConfigWriter.svg?branch=develop)](https://travis-ci.org/hollax/ArrayConfigWriter)
-
+[![Coverage Status](https://coveralls.io/repos/github/hollax/ArrayConfigWriter/badge.svg?branch=master)](https://coveralls.io/github/hollax/ArrayConfigWriter?branch=master)
 
 # Array Config Writer 
 
