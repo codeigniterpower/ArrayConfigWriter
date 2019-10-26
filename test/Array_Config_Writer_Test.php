@@ -28,7 +28,7 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
     public function testConstructor()
     {
         $this->configWriter = new Array_Config_Writer($this->configFile);
-        $this->assertInstanceOf( Array_Config_Writer::class,  $this->configWriter);
+        $this->assertInstanceOf( 'Array_Config_Writer',  $this->configWriter);
         $this->assertEmpty($this->configWriter->getLastError(), 'Should not have error');
     }
 
