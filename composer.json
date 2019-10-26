@@ -1,0 +1,17 @@
+{
+    "name": "wakeel/array-config-writer",
+    "description": "Library to update config array",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "license": "GPLv2 or above",
+    "authors": [
+        {
+            "name": "Wakeel Ogunsanya",
+            "email": "wakeel.oguns@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
