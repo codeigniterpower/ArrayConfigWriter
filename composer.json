@@ -1,5 +1,5 @@
 {
-    "name": "wakeel/array-config-writer",
+    "name": "hollax/array-config-writer",
     "description": "Library to update config array",
     "type": "library",
     "require-dev": {
@@ -13,5 +13,8 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {},
+    "autoload":{
+        "classmap": ["class-array-config-writer.php"]
+    }
 }
