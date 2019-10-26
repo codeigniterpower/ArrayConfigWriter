@@ -7,4 +7,4 @@ sudo: required
 dist: trusty
 script: phpunit
 after_success:
-  - travis_retry php tests/bin/coveralls.phar -v
+  - travis_retry php test/bin/coveralls.phar -v
