@@ -23,13 +23,22 @@ class Array_Config_Writer {
      * Update or create the index
      */
     const CREATE_OR_UPDATE = 2;
+
+    /**
+     * The config source file
+     * 
+     * set during with class construct
+     * @var string 
+     */
+    protected $_file ;
+
     /**
      * The config file to write
      * 
-     * set during with class construct
-     * @var strng 
+     * Default to source file
+     * @var string 
      */
-    protected $_file ;
+    protected $_destinationFile ;
     
     /**
      * Content read from file
@@ -100,6 +109,7 @@ class Array_Config_Writer {
     public function __construct($config_file , $variable_name = '\$config' , $auto_save = true ) 
     {
         $this->_file = $config_file ;
+        $this->_destinationFile = $config_file ;
         $this->_autoSave = $auto_save ;
         $this->setVariableName($variable_name );
         
@@ -266,30 +276,55 @@ class Array_Config_Writer {
      * You will olnly do this to transfer the php file content to another file
      * 
      * @param string $name
+     * @deprecated since 1.3.0 use setDestinationFile()  method
      * 
      * @return Array_Config_Writer for method chaining
      */
     public function setFilename($name = null)
     {
-        if( ! file_exists($name))
+        return $this->setDestinationFile($name);
+    }
+    
+
+    /**
+     * Set the file to save updated configuration
+     * @since 1.3.0
+     * 
+     * @param string $name
+     * 
+     * @return Array_Config_Writer for method chaining
+     */
+    public function setDestinationFile($path)
+    {
+        if( ! file_exists($path))
         {
-            $this->_lastError = "File {$name} does not exist";
+            $this->_lastError = "File {$path} does not exist";
         }
         else
         {
-            $this->_file = $name;
+            $this->_destinationFile = $path;
         }
 
         return $this;
     }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getDestinationName()
+    {
+        return $this->_destinationFile;
+    }
+
     
-    
+   
     /**
      *  Set the config varible name
      * // actually we expect someting like '\$config' but user migt just provide 'config'
      * 
      * @param string $name
-     * 
+     * @since 1.3.0
      * @return Array_Config_Writer
      */
     public function setVariableName($name = null)
@@ -315,10 +350,19 @@ class Array_Config_Writer {
         return $this;
     }
 
+
+    /**
+     * @return string
+     */
+    public function getVariableName()
+    {
+        return  $this->_variable;
+    }
+
     /**
      * We can now update the file content
      * 
-     * if the _autosave property is true, we auto updte file
+     * if the _autosave property is true, we auto update file
      * 
      */
     public function __destruct() 
@@ -339,9 +383,9 @@ class Array_Config_Writer {
      */
     public function save()
     {
-        if(!$this->_lastError)
+        if( ! $this->_lastError)
         {
-            file_put_contents( $this->_file , $this->_fileContent ) ;
+            file_put_contents( $this->_destinationFile , $this->_fileContent ) ;
         }
         return $this;
     }
@@ -353,12 +397,12 @@ class Array_Config_Writer {
      */
     public function hasError()
     {
-        return !empty($this->_lastError);
+        return ! empty($this->_lastError);
     }
     /**
-     * Get last error that occured
+     * Get last error 
      * 
-     * @return string
+     * @return string Last error by the library if any
      */
     public function getLastError()
     {
@@ -374,5 +418,15 @@ class Array_Config_Writer {
     public function setAutoSave($option = true)
     {
         $this->_autoSave = $option;
+    }
+    /**
+     * Set auto save option
+     * @since 1.3.0
+     * 
+     * @return boolean Auto save option
+     */
+    public function getAutoSave()
+    {
+        return $this->_autoSave;
     }
 }
