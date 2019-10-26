@@ -271,7 +271,16 @@ class Array_Config_Writer {
      */
     public function setFilename($name = null)
     {
-        $this->_file = $name;
+        if( ! file_exists($name))
+        {
+            $this->_lastError = "File {$name} does not exist";
+        }
+        else
+        {
+            $this->_file = $name;
+        }
+
+        return $this;
     }
     
     
