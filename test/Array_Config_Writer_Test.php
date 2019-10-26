@@ -1,8 +1,6 @@
 <?php
 
-
 require_once dirname(__DIR__).'../class-array-config-writer.php';
-
 
 class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 

@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/hollax/ArrayConfigWriter.svg?branch=develop)](https://travis-ci.org/hollax/ArrayConfigWriter)
+
+
 # Array Config Writer 
 
 This php library can be used to update array values in php a file.
@@ -13,8 +16,13 @@ the values of the array.
 
 
 ## Usage
-* Include the class library to be available for usage `require_once 'class-array-config-writer.php';`
-* Create an instance of  `Array_Config_Writer` class for the file that holds the php array we want to update
+* Include the class library to be available for usage 
+
+    ```require_once 'class-array-config-writer.php';```
+
+
+* Create an instance of  `Array_Config_Writer` class for the file that holds the php array we want to update:
+
 ```
 $config_writer = new Array_Config_Writer($config_file, $variable_name , $auto_save );
 ```
@@ -95,13 +103,13 @@ Now you can start updating the index of the array like this
 
 Create an instance of the library:
 
-```
+```php
     $config_writer = new Array_Config_Writer( APP_PATH.'config/config.php', 'config' );
 ```
 
  Update a config index. The site name for instance:
  
-```
+```php
     $config_writer->write('site_name' , "New Site Name' );
 ```
 Now the file *config.php* should have been updated
@@ -109,39 +117,39 @@ Now the file *config.php* should have been updated
 
 ## Method chaining 
 
+```php
     $config_writer->write('site_name' , "New Site Name' )->write('enable_caching' , false );
+```
 
 
 To update the `'message'` index which has array has value
 
 * First get the current value 
 
-```
+```php
 $message = $config['message'];
 ```
 
 * Then change its value(s)
     
-```
+```php
     $message['title'] = 'My New title' ;
     $message['body'] = 'New message body' ;
 ```
 
-* Or completely set new array for the message index.
-```
-    // assuming the admin posted form. Ideally you would validate submission
-    $message = $_POST['message'];
-```
+* Or completely set new array for the message index
+(assuming the admin posted form. Ideally you would validate submission)
+
+`$message = $_POST['message'];`
+
 
 * Save it with the library 
 
-    $config_writer->write('message' , $message );
+    `$config_writer->write('message' , $message );`
     
 ## Testing
-    You need phpunit to run the test cases
+You need phpunit to run the test cases
 
-    ```
-    phpunit test/Array_Config_Writer_Test.php
-    ```
+`$ phpunit`
 
 [Read More](http://hollax.github.io/ArrayConfigWriter)
