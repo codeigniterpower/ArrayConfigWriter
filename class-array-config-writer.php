@@ -23,22 +23,13 @@ class Array_Config_Writer {
      * Update or create the index
      */
     const CREATE_OR_UPDATE = 2;
-
-    /**
-     * The config source file
-     * 
-     * set during with class construct
-     * @var string 
-     */
-    protected $_file ;
-
     /**
      * The config file to write
      * 
-     * Default to source file
-     * @var string 
+     * set during with class construct
+     * @var strng 
      */
-    protected $_destinationFile ;
+    protected $_file ;
     
     /**
      * Content read from file
@@ -109,7 +100,6 @@ class Array_Config_Writer {
     public function __construct($config_file , $variable_name = '\$config' , $auto_save = true ) 
     {
         $this->_file = $config_file ;
-        $this->_destinationFile = $config_file ;
         $this->_autoSave = $auto_save ;
         $this->setVariableName($variable_name );
         
@@ -144,7 +134,7 @@ class Array_Config_Writer {
      * @param null|array $comments Comment to add to the top of item (new item), each element
      *  will be placed oon a new line. *  is added before each line , meaning
      *  you dont have to put /** or *  unless you want it show 
-     * @throws Exception for invalid write method
+     * @throws Exception 
      * 
     * @note you can not update existing item comment
      *  
@@ -172,14 +162,14 @@ class Array_Config_Writer {
         $regex = '#(' . $prefix  . ')(';
         // add a mark in case config item doesnt exists
         $mark = "{$prefix}" ;
-        // we can update multi dimentional
+        // we can update multi dementional
         $indices = is_array($index)? $index : array( $index ) ;
         $comment_str = '' ;
         
         foreach ( $indices as  $i)
         {
             $is_int = is_int($i) ;
-             // we make sure we dont change the index type if its numeric
+             // we make sure we dont chenge the index type if its numeric
             $new_item_index = $is_int? $i : "'$i'" ;
             // if the index is int, we dont need ' or "" to be checked in the regex
             $regex .= '\[\s*';
@@ -189,24 +179,24 @@ class Array_Config_Writer {
             $regex .= '\s*\]' ;
             // Used before we seperated numeric index from string
             //$regex .= '\[\s*(\'|\")(' . $i . ')*(\'|\")\s*\]' ;
+           
             
-            //placed in file as new index if doesn't exist
             $mark .= "[$new_item_index]" ;
         }
        
         // closing
-        $regex .= ')\s*=[^;]*#' ; 
+        $regex .= ')\s*=[^\;]*#' ; 
         $mark .= " = ";
         
-        if(preg_match($regex, $this->_fileContent))
-        {
+        if(preg_match($regex, $this->_fileContent)){
+            
             // well config aleady exists 
             // may be is application upgrade :) we wouldnt wana overide user settings 
             if( $write_method == self::SKIP_IF_EXIST )
             {
                 return $this;
             }
-            // update the content
+            // update th content
             $this->_fileContent = preg_replace(   $regex ,  '$1$2 = ' .  var_export( $replacement , true ) , $this->_fileContent   ) ;
         }
         // config item doesnt exist yet create new index if reqyuired
@@ -276,64 +266,37 @@ class Array_Config_Writer {
      * You will olnly do this to transfer the php file content to another file
      * 
      * @param string $name
-     * @deprecated since 1.3.0 use setDestinationFile()  method
      * 
      * @return Array_Config_Writer for method chaining
      */
     public function setFilename($name = null)
     {
-        return $this->setDestinationFile($name);
+        $this->_file = $name;
     }
     
-
-    /**
-     * Set the file to save updated configuration
-     * @since 1.3.0
-     * 
-     * @param string $name
-     * 
-     * @return Array_Config_Writer for method chaining
-     */
-    public function setDestinationFile($path)
-    {
-        $this->_destinationFile = $path;
-
-        return $this;
-    }
-
-    /**
-     * 
-     * @return string
-     */
-    public function getDestinationFile()
-    {
-        return $this->_destinationFile;
-    }
-
     
-   
     /**
      *  Set the config varible name
      * // actually we expect someting like '\$config' but user migt just provide 'config'
      * 
      * @param string $name
-     * @since 1.3.0
+     * 
      * @return Array_Config_Writer
      */
     public function setVariableName($name = null)
     {
        
-        if( ! is_string($name))
+        if(!is_string($name))
         {
             $this->_lastError = 'Variable name not string: '. $name;
             return $this;
         }
         
-        if(substr($name, 0, 1 ) != '$' && substr($name, 1, 1 ) != '$')
+        if(substr($name, 1, 1 ) != '$')
         {
             $name = '$' . $name ;
         }
-        if(substr($name, 0 , 1 ) != '\\')
+         if(substr($name, 0 , 1 ) != '\\')
         {
             $name = '\\' . $name ;
         }
@@ -343,19 +306,10 @@ class Array_Config_Writer {
         return $this;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getVariableName()
-    {
-        return  $this->_variable;
-    }
-
     /**
      * We can now update the file content
      * 
-     * if the _autosave property is true, we auto update file
+     * if the _autosave property is true, we auto updte file
      * 
      */
     public function __destruct() 
@@ -376,9 +330,9 @@ class Array_Config_Writer {
      */
     public function save()
     {
-        if( ! $this->_lastError)
+        if(!$this->_lastError)
         {
-            file_put_contents( $this->_destinationFile , $this->_fileContent ) ;
+            file_put_contents( $this->_file , $this->_fileContent ) ;
         }
         return $this;
     }
@@ -390,12 +344,12 @@ class Array_Config_Writer {
      */
     public function hasError()
     {
-        return ! empty($this->_lastError);
+        return !empty($this->_lastError);
     }
     /**
-     * Get last error 
+     * Get last error that occured
      * 
-     * @return string Last error by the library if any
+     * @return string
      */
     public function getLastError()
     {
@@ -411,25 +365,5 @@ class Array_Config_Writer {
     public function setAutoSave($option = true)
     {
         $this->_autoSave = $option;
-
-        return $this;
-    }
-    /**
-     * Set auto save option
-     * @since 1.3.0
-     * 
-     * @return boolean Auto save option
-     */
-    public function getAutoSave()
-    {
-        return $this->_autoSave;
-    }
-
-    /**
-     * Get confil file content
-     */
-    public function getContent()
-    {
-      return $this->_fileContent;   
     }
 }
