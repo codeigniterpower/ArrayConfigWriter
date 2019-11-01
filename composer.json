@@ -1,0 +1,19 @@
+{
+    "name": "hollax/array-config-writer",
+    "description": "Library to update config array",
+    "type": "library",
+    "require-dev": {
+    },
+    "license": "GPLv2 or above",
+    "authors": [
+        {
+            "name": "Wakeel Ogunsanya",
+            "email": "wakeel.oguns@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload":{
+        "classmap": ["class-array-config-writer.php"]
+    }
+}
