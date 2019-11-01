@@ -42,7 +42,7 @@ class Array_Config_Writer_Multi_Test extends  \PHPUnit\Framework\TestCase {
 
      /**
      * @depends testConstructor
-     * @covers setVariableName getVariableName
+     * @covers Array_Config_Writer::setVariableName Array_Config_Writer::getVariableName
      */
     public function testSetVariableName($writer)
     {
@@ -59,7 +59,7 @@ class Array_Config_Writer_Multi_Test extends  \PHPUnit\Framework\TestCase {
     /**
      * @depends testSetVariableName
      * 
-     * @covers write setDestinationFile
+     * @covers Array_Config_Writer::write Array_Config_Writer::setDestinationFile
      */
     public function testWrite($writer)
     {

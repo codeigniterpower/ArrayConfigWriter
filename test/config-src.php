@@ -2,6 +2,9 @@
 
 $config['siteName'] = 'Default Name';
 
+//test 
+$config['notes'] = 'Foo; Bar';
+
 $config['age'] = 20;
 
 $config['address'] = [

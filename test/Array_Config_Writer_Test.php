@@ -63,7 +63,8 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
       /**
      * @depends testConstructor
-     * @covers write
+     * @covers Array_Config_Writer::write Array_Config_Writer::getContent
+     * 
      */
     public function testWriteUpdateInt($writer)
     {
@@ -84,6 +85,27 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
     }
 
+    /**
+     * 
+     */
+    public function testWriteUpdateStringWithSemiColon($writer)
+    {
+                
+        $writer->write('age', 20);
+        $this->assertContains("\$config['age'] = 20", $writer->getContent());
+        $this->assertContains("\$config['siteName'] = 'Foo'", $writer->getContent(), 'Changes only target');
+
+        $writer->save();
+
+        $config = require __DIR__.'/config.php';
+
+        $this->assertTrue(is_array($config));
+        $this->assertEquals(20, $config['age']);
+        $this->assertFalse($writer->hasError());
+
+        return $writer;
+
+    }
     /**
      * @depends testWriteUpdateInt
      */
@@ -119,7 +141,7 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
     /**
      * @depends testConstructor
-     * @covers setAutoSave getAutoSave
+     * @covers @covers Array_Config_Writer::setAutoSave Array_Config_Writer::getAutoSave
      */
     public function testSetAutoSave($writer)
     {
