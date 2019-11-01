@@ -1,13 +1,11 @@
 [![Build Status](https://travis-ci.org/hollax/ArrayConfigWriter.svg?branch=develop)](https://travis-ci.org/hollax/ArrayConfigWriter)
-[![Coverage Status](https://coveralls.io/repos/github/hollax/ArrayConfigWriter/badge.svg?branch=master)](https://coveralls.io/github/hollax/ArrayConfigWriter?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/hollax/ArrayConfigWriter/badge.svg?branch=develop)](https://coveralls.io/github/hollax/ArrayConfigWriter?branch=master)
+[![php: >=5.3.0](https://img.shields.io/badge/php->=5.3-8892BF.svg)](https://php.net/) 
 
 # Array Config Writer 
 
-This php library that can be used to update array values in php a file.
-Some applications use php array to store configuration values and to update the values
-users will have to manually open the configuration file and update the values.
-
-This library makes updating config array possible programtically.
+This php library can be used to update array values in a php  file.
+The library can be used by applications that use php array to store configuration values. It makes updating config array possible programatically.
 
 ## Installation 
 
@@ -18,8 +16,9 @@ This library makes updating config array possible programtically.
 
     ```require_once 'class-array-config-writer.php';```
 
+**The class supports autoload via composer**
 
-* Create an instance of  `Array_Config_Writer` class for the file that holds the php array we want to update:
+* Create an instance of  `Array_Config_Writer` class for the file that needs to be updated:
 
 ```php
 $config_writer = new Array_Config_Writer($config_file, $variable_name , $auto_save );
@@ -30,6 +29,14 @@ Where :
 * **$config_file** (string) : The absolute path to the file where the array is declared. 
 * **$variable_name** (string) : The variable name of the array  to update. 
 * **$auto_save** (boolean) : Whether the library should automatically save the changes.
+
+We can now updating values:
+
+```$config_writer->write('key' , value );```
+
+**Notes:** 
+* You can set value to any php variable type. 
+* The library treats numeric index "as is". Meaning '21' is different from 21
 
 Supported variable Styles:
 
@@ -47,14 +54,6 @@ Supported variable Styles:
 **Notes:** 
 * The library expect the variable to be indexed. 
 * The file can have other variables aside our target variable.
-
-We can now updating values:
-
-```$config_writer->write('key' , value );```
-
-**Notes:** 
-* You can set value to any php variable type. 
-* The library treats numeric index "as is". Meaning '21' is different from 21
 
 ## Examples
 

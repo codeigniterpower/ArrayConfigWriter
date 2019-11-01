@@ -13,6 +13,9 @@
         <testsuite name="single">
             <file>./test/Array_Config_Writer_Test.php</file>
         </testsuite>
+         <testsuite name="multi">
+            <file>./test/Array_Config_Writer_Multi_Test.php</file>
+        </testsuite>
     </testsuites>
      <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

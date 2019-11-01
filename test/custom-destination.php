@@ -11,7 +11,7 @@ $config['address'] = [
 ];
 
 
-$db['default']['host'] = 'localhost';
+$db['default']['host'] = 'example.com';
 $db['default']['username'] = 'root';
 $db['default']['password'] = 'root';
 

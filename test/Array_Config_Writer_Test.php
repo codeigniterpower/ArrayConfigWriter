@@ -1,5 +1,8 @@
 <?php
 
+ini_set('error_reporting', E_ALL);;
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 
 require_once dirname(__DIR__).'/class-array-config-writer.php';
 
@@ -16,9 +19,11 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
      */
     public $configWriter;
 
+    public $testDir;
 
     public function setup()
     {
+        $this->testDire = dirname(__DIR__);
         $config_src = __DIR__.'/config-src.php';
         $config = __DIR__.'/config.php';
         $this->configFile = $config;
@@ -27,17 +32,102 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
     public function testConstructor()
     {
-        $this->configWriter = new Array_Config_Writer($this->configFile);
-        $this->assertInstanceOf( 'Array_Config_Writer',  $this->configWriter);
-        $this->assertEmpty($this->configWriter->getLastError(), 'Should not have error');
+        $writer = new Array_Config_Writer($this->configFile);
+        $this->assertInstanceOf( 'Array_Config_Writer',  $writer);
+        $this->assertEmpty($writer->getLastError(), 'Should not have error');
+        
+        return $writer;
+    }
+
+
+    
+   
+
+    /**
+     * @depends testConstructor
+     */
+    public function testWrite($writer)
+    {
+
+        $writer->write('siteName', 'Foo');
+        $this->assertContains("\$config['siteName'] = 'Foo'", $writer->getContent());
+        
+        $writer->save();
+
+        $config = require __DIR__.'/config.php';
+
+        $this->assertTrue(is_array($config));
+        $this->assertEquals('Foo', $config['siteName']);
+        $this->assertFalse($writer->hasError());
+    }
+
+      /**
+     * @depends testConstructor
+     * @covers write
+     */
+    public function testWriteUpdateInt($writer)
+    {
+                
+        $writer->write('age', 20);
+        $this->assertContains("\$config['age'] = 20", $writer->getContent());
+        $this->assertContains("\$config['siteName'] = 'Foo'", $writer->getContent(), 'Changes only target');
+
+        $writer->save();
+
+        $config = require __DIR__.'/config.php';
+
+        $this->assertTrue(is_array($config));
+        $this->assertEquals(20, $config['age']);
+        $this->assertFalse($writer->hasError());
+
+        return $writer;
+
     }
 
     /**
-     * @covers Array_Config_Writer::getLastError
+     * @depends testWriteUpdateInt
      */
-    public function testConstructorError()
+    public function testWriteUpdateArray($writer)
     {
-        $config_writer = new Array_Config_Writer('DummyFile.php');
-        $this->assertNotEmpty($config_writer->getLastError(), 'Should have file not found error');
+                
+        $currentConfig = require __DIR__.'/config.php';
+
+        $this->assertEquals('New York', $currentConfig['address']['city']);
+        $this->assertEquals('USA', $currentConfig['address']['country']);
+        
+        $newAddress = [
+            'line' => 'Line One',
+            'city' => 'Lagos',
+            'country' => 'Nigeria'
+        ];
+        $writer->write('address', $newAddress);
+
+        $this->assertContains("\$config['age'] = 20", $writer->getContent());
+        $this->assertContains("\$config['siteName'] = 'Foo'", $writer->getContent(), 'Changes only target');
+
+        $writer->save();
+
+        $config = require __DIR__.'/config.php';
+
+        $this->assertTrue(is_array($config));
+        $this->assertTrue(is_array($config['address']));
+        $this->assertEquals('Lagos', $config['address']['city']);
+        $this->assertEquals('Nigeria', $config['address']['country']);
+        $this->assertFalse($writer->hasError());
+
     }
+
+    /**
+     * @depends testConstructor
+     * @covers setAutoSave getAutoSave
+     */
+    public function testSetAutoSave($writer)
+    {
+        $this->assertTrue($writer->getAutoSave(), 'Auto Save by default');
+        $writer->setAutoSave(false);
+        $this->assertFalse($writer->getAutoSave(), "Disables autosave");
+        $writer->setAutoSave(true);
+        $this->assertTrue($writer->getAutoSave(), 'Reset to autosave');
+    }
+
 }
