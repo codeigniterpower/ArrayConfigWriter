@@ -1,13 +1,20 @@
 <?php 
 
-$config['siteName'] = 'Foo';
+$config['siteName'] = 'Default Name';
 
-$config['age'] = 20;
+$config['age'] = 52;
 
-$config['address'] = array (
-  'line' => 'Line One',
-  'city' => 'Lagos',
-  'country' => 'Nigeria',
-);
+$config['address'] = [
+    'line'  => 'Line 1',
+    'city' =>  'New York',
+    'country' => 'USA'
+];
+
+$config['html_element'] = '<span style="color: blue; font-size: 20px;">Hello World</span>';
+
+$config['foo'] = [
+    'bar'  => 'Foo; Bar',
+    'baz' =>  'Foo Baz',
+];
 
 return $config;

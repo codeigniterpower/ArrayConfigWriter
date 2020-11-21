@@ -73,7 +73,7 @@ class Array_Config_Writer_Multi_Test extends  \PHPUnit\Framework\TestCase {
         
         $writer->save();
 
-        //file name has been changed
+        //get config
         $config = require __DIR__.'/custom-destination.php';
 
         $this->assertTrue(is_array($config));
