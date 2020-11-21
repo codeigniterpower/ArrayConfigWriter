@@ -42,8 +42,7 @@ class Array_Config_Writer_Multi_Test extends  \PHPUnit\Framework\TestCase {
 
      /**
      * @depends testConstructor
-     * @covers Array_Config_Writer::setVariableName 
-     * @covers Array_Config_Writer::getVariableName
+     * @covers Array_Config_Writer::setVariableName Array_Config_Writer::getVariableName
      */
     public function testSetVariableName($writer)
     {
@@ -60,8 +59,7 @@ class Array_Config_Writer_Multi_Test extends  \PHPUnit\Framework\TestCase {
     /**
      * @depends testSetVariableName
      * 
-     * @covers Array_Config_Writer::write
-     * @coversArray_Config_Writer::setDestinationFile
+     * @covers Array_Config_Writer::write Array_Config_Writer::setDestinationFile
      */
     public function testWrite($writer)
     {
@@ -75,7 +73,7 @@ class Array_Config_Writer_Multi_Test extends  \PHPUnit\Framework\TestCase {
         
         $writer->save();
 
-        //file name has been changed
+        //get config
         $config = require __DIR__.'/custom-destination.php';
 
         $this->assertTrue(is_array($config));
