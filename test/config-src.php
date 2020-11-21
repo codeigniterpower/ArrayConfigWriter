@@ -3,7 +3,6 @@
 $config['siteName'] = 'Default Name';
 
 $config['age'] = 52;
-
 $config['address'] = [
     'line'  => 'Line 1',
     'city' =>  'New York',
