@@ -64,7 +64,7 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
 	/**
      * @depends testConstructor
-     * @covers write
+     * @covers Array_Config_Writer::write
      */
     public function testUpdateInt($writer)
     {
@@ -157,7 +157,7 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
     /**
      * @depends testConstructor
-     * @covers write
+     * @covers Array_Config_Writer::write
      */
     public function testUpdateHtml($writer)
     {
@@ -179,7 +179,7 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
     /**
      * @depends testConstructor
-     * @covers setAutoSave getAutoSave
+     * @covers Array_Config_Writer::setAutoSave Array_Config_Writer::getAutoSave
      */
     public function testSetAutoSave($writer)
     {
