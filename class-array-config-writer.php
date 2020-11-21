@@ -4,7 +4,7 @@
 Copyright 2016 Wakeel Ogunsanya
 Licensed under GPLv2 or above
 
-Version 1.2.1
+Version 1.2.2
 */
 
 class Array_Config_Writer {
