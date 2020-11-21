@@ -32,6 +32,7 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
 
     public function testConstructor()
     {
+
         $writer = new Array_Config_Writer($this->configFile);
         $this->assertInstanceOf( 'Array_Config_Writer',  $writer);
         $this->assertEmpty($writer->getLastError(), 'Should not have error');
@@ -46,7 +47,7 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
     /**
      * @depends testConstructor
      */
-    public function testWrite($writer)
+    public function testUpdate($writer)
     {
 
         $writer->write('siteName', 'Foo');
@@ -61,13 +62,11 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
         $this->assertFalse($writer->hasError());
     }
 
-      /**
+	/**
      * @depends testConstructor
-     * @covers Array_Config_Writer::write 
-     * @covers Array_Config_Writer::getContent
-     * 
+     * @covers Array_Config_Writer::write
      */
-    public function testWriteUpdateInt($writer)
+    public function testUpdateInt($writer)
     {
                 
         $writer->write('age', 20);
@@ -85,12 +84,14 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
         return $writer;
 
     }
+	
+	
 
    
     /**
-     * @depends testWriteUpdateInt
+     * @depends testUpdateInt
      */
-    public function testWriteUpdateArray($writer)
+    public function testUpdateArray($writer)
     {
                 
         $currentConfig = require __DIR__.'/config.php';
@@ -119,11 +120,67 @@ class Array_Config_Writer_Test extends  \PHPUnit\Framework\TestCase {
         $this->assertFalse($writer->hasError());
 
     }
+	
+	/**
+     * @depends testUpdateInt
+     */
+    public function testUpdateArrayWithASemicolon($writer)
+    {
+                
+        $currentConfig = require __DIR__.'/config.php';
+
+        $this->assertEquals('New York', $currentConfig['address']['city']);
+        $this->assertEquals('USA', $currentConfig['address']['country']);
+        
+        $newAddress = [
+            'line' => 'Line One; More Line',
+            'city' => 'Lagos',
+            'country' => 'Nigeria'
+        ];
+        $writer->write('address', $newAddress);
+
+        $this->assertContains("\$config['age'] = 20", $writer->getContent());
+        $this->assertContains("\$config['siteName'] = 'Foo'", $writer->getContent(), 'Changes only target');
+
+        $writer->save();
+
+        $config = require __DIR__.'/config.php';
+
+        $this->assertTrue(is_array($config));
+        $this->assertTrue(is_array($config['address']));
+	    $this->assertEquals('Line One; More Line', $config['address']['line']);
+        $this->assertEquals('Lagos', $config['address']['city']);
+        $this->assertEquals('Nigeria', $config['address']['country']);
+        $this->assertFalse($writer->hasError());
+
+    }
+
 
     /**
      * @depends testConstructor
-     * @covers Array_Config_Writer::setAutoSave
-     * @covers Array_Config_Writer::getAutoSave
+     * @covers Array_Config_Writer::write
+     */
+    public function testUpdateHtml($writer)
+    {
+                
+        $element = '<div class="color:green">Foo</div>';
+        $writer->write('html_element', $element);
+        $this->assertContains("\$config['html_element'] = '".$element."'", $writer->getContent());
+
+        $writer->save();
+
+        $config = require __DIR__.'/config.php';
+        $this->assertTrue(is_array($config));
+        $this->assertEquals(20, $config['age']);
+        $this->assertFalse($writer->hasError());
+
+        return $writer;
+
+    }
+
+    /**
+     * @depends testConstructor
+     * @covers Array_Config_Writer::setAutoSave Array_Config_Writer::getAutoSave
      */
     public function testSetAutoSave($writer)
     {

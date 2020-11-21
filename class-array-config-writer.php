@@ -181,8 +181,8 @@ class Array_Config_Writer {
             $is_int = is_int($i) ;
              // we make sure we dont change the index type if its numeric
             $new_item_index = $is_int? $i : "'$i'" ;
-            // if the index is int, we dont need ' or "" to be checked in the regex
             $regex .= '\[\s*';
+            // if the index is int, we dont need ' or "" to be checked in the regex
             $regex .= $is_int? '' : '(\'|\")' ;
             $regex .=  '('.$i.')*';
             $regex .= $is_int? '' : '(\'|\")';
@@ -194,11 +194,18 @@ class Array_Config_Writer {
             $mark .= "[$new_item_index]" ;
         }
        
-        // closing
-        $regex .= ')\s*=[^;]*#' ; 
+        // value
+        $regex .= ')\s*=\s?' ; 
+        $regex .= "({$this->getStringRegex()}|{$this->getIntRegex()}|{$this->getArrayRegex()})" ;
+        //allow ; within a string @issue 7
+        // $regex .= '|.*".*".*|' ; 
+        // $regex .= "|.*'.*'.*|"; 
+        //close value match
+        $regex .= ';\s*$#m' ; 
         $mark .= " = ";
+        $exists = preg_match($regex, $this->_fileContent, $m);
         
-        if(preg_match($regex, $this->_fileContent))
+        if($exists)
         {
             // well config aleady exists 
             // may be is application upgrade :) we wouldnt wana overide user settings 
@@ -207,7 +214,8 @@ class Array_Config_Writer {
                 return $this;
             }
             // update the content
-            $this->_fileContent = preg_replace(   $regex ,  '$1$2 = ' .  var_export( $replacement , true ) , $this->_fileContent   ) ;
+            $this->_fileContent = preg_replace(   $regex ,  
+                '$1$2 = ' .  var_export( $replacement , true ).';' , $this->_fileContent   ) ;
         }
         // config item doesnt exist yet create new index if reqyuired
         else
@@ -431,5 +439,21 @@ class Array_Config_Writer {
     public function getContent()
     {
       return $this->_fileContent;   
+    }
+
+
+    protected function getStringRegex()
+    {
+        return '(\'|").*(\'|")';
+    }
+
+    protected function getIntRegex()
+    {
+        return '[^;]+';
+    }
+
+    protected function getArrayRegex()
+    {
+        return '(:?array|\[)\s*\(.*(:?\)|\])*';
     }
 }
