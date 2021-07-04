@@ -14,7 +14,8 @@ The library can be used by applications that use php array to store configuratio
 ## Usage
 * `include` the class library in your script
 
-    ```require_once 'class-array-config-writer.php';```
+    ```php 
+require_once 'class-array-config-writer.php';```
 
 **The class supports autoload via composer**
 
@@ -30,9 +31,11 @@ Where :
 * **$variable_name** (string) : The variable name of the array  to update. 
 * **$auto_save** (boolean) : Whether the library should automatically save the changes.
 
-We can now updating values:
+We can start updating values:
 
-```$config_writer->write('key' , value );```
+```
+$config_writer->write('key' , value );
+```
 
 **Notes:** 
 * You can set value to any php variable type. 
@@ -41,15 +44,21 @@ We can now updating values:
 Supported variable Styles:
 
 1. Single index
-` $config[ 'key'] = 'value' ;`
+```php
+ $config[ 'key'] = 'value' ;
+```
 
 2. Multi dimensional
 
-* `$config['key1']['key2'] = 'value';`
+* ```php
+$config['key1']['key2'] = 'value';
+```
 
 **note** You can not use the library to update the following format: 
 
-`$config = array( 'key' => 'value' );`
+```php
+$config = array( 'key' => 'value' );
+```
 
 **Notes:** 
 * The library expect the variable to be indexed. 
