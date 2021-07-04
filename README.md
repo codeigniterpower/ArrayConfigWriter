@@ -50,7 +50,7 @@ Supported variable Styles:
 
 2. Multi dimensional
 
-* ```php
+```php
 $config['key1']['key2'] = 'value';
 ```
 
