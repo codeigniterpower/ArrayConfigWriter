@@ -1,13 +1,12 @@
 <?php
 
 /*
-Copyright 2016 Wakeel Ogunsanya
 Licensed under GPLv2 or above
 
 Version 1.2.2
 */
 
-class Array_Config_Writer {
+class ConfigWriter {
     
     /**
      * Skip updating the index if the index acctually exist
@@ -106,12 +105,28 @@ class Array_Config_Writer {
      * @param string $config_file Asolute path to config file
      * @param string $variable_name the name of the config varible to update
      */
-    public function __construct($config_file , $variable_name = '\$config' , $auto_save = true ) 
+    public function __construct($config_file = NULL) 
     {
-        $this->_file = $config_file ;
-        $this->_destinationFile = $config_file ;
-        $this->_autoSave = $auto_save ;
-        $this->setVariableName($variable_name );
+        $this->_file = APPPATH .'config/config.php';
+        $this->_autoSave = true ;
+        $this->setVariableName('config');
+        if( is_array($config_file) )
+        {
+            if (array_key_exists('file', $config_file))
+                $this->_file = APPPATH .'config/'.$config_file['file'];
+            if (array_key_exists('auto_save', $config_file))
+                $this->_autoSave = $config_file['auto_save'];
+            if (array_key_exists('variable_name', $config_file))
+                $this->setVariableName($config_file['variable_name'] );
+        }
+        else
+        {
+            if( isset($config_file) )
+                $this->_file = APPPATH .'config/config.php';
+            else
+                $this->_file = APPPATH .'config/'.$config_file;
+        }
+        $this->_destinationFile = $this->_file ;
         
         if ( ! file_exists($this->_file))
         {
@@ -120,12 +135,7 @@ class Array_Config_Writer {
         
             return ;
         }
-        if ( ! $variable_name)
-        {
-            $this->_lastError = 'You must set the set parameter of the library construct has varible to update' ;
-            return ;
-        }
-        
+
         $this->_fileContent =  file_get_contents( $this->_file ) ;
         
     }
@@ -286,7 +296,7 @@ class Array_Config_Writer {
      * @param string $name
      * @deprecated since 1.3.0 use setDestinationFile()  method
      * 
-     * @return Array_Config_Writer for method chaining
+     * @return ConfigWriter for method chaining
      */
     public function setFilename($name = null)
     {
@@ -300,7 +310,7 @@ class Array_Config_Writer {
      * 
      * @param string $name
      * 
-     * @return Array_Config_Writer for method chaining
+     * @return ConfigWriter for method chaining
      */
     public function setDestinationFile($path)
     {
@@ -326,7 +336,7 @@ class Array_Config_Writer {
      * 
      * @param string $name
      * @since 1.3.0
-     * @return Array_Config_Writer
+     * @return ConfigWriter
      */
     public function setVariableName($name = null)
     {
@@ -377,10 +387,10 @@ class Array_Config_Writer {
     /**
      * Save the new content to file 
      * 
-     * You can call Array_Config_Writer::write() as many times as required
+     * You can call ConfigWriter::write() as many times as required
      * before calling this method
      * 
-     * @return \Array_Config_Writer
+     * @return \ConfigWriter
      */
     public function save()
     {

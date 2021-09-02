@@ -1,138 +1,74 @@
-[![Build Status](https://travis-ci.org/hollax/ArrayConfigWriter.svg?branch=develop)](https://travis-ci.org/hollax/ArrayConfigWriter)
-[![Coverage Status](https://coveralls.io/repos/github/hollax/ArrayConfigWriter/badge.svg?branch=develop)](https://coveralls.io/github/hollax/ArrayConfigWriter?branch=master)
 [![php: >=5.3.0](https://img.shields.io/badge/php->=5.3-8892BF.svg)](https://php.net/) 
+[![Linux ready](https://img.shields.io/badge/linux-ready-success)](https://debian.org)
 
-# Array Config Writer 
+# Codeigniter Array ConfigWriter 
 
-This php library can be used to update array values in a php  file.
-The library can be used by applications that use php array to store configuration values. It makes updating config array possible programatically.
+This php library can be used to update array config valuies dinamically of codeigniter.
+The library can be used by applications that use php array to store configuration values. 
+It makes updating config array possible programatically.
 
-## Installation 
+## Requirements
 
-* Download the library and extract it to a folder in your application. The folder choice depends on your application structure.
+* Codeigniter 2.x or 3.x
+* PHP 5.3; GD module need for image loading and preview
 
-## Usage
-* `include` the class library in your script
+## Installation
 
-    ```php 
-require_once 'class-array-config-writer.php';```
+The folder structure should match the CodeIgniter directory structure.
+Download the library and extract it to `libraries` in your application.
 
-**The class supports autoload via composer**
+### Quick setup
 
-* Create an instance of  `Array_Config_Writer` class for the file that needs to be updated:
+1. Copy the `application/libraries/ConfigWriter.php` file to `application/libraries/`
+2. Initialise the ConfigWriter library and include it in your controller or whatever. Example below:
 
-```php
-$config_writer = new Array_Config_Writer($config_file, $variable_name , $auto_save );
-```
+        public function myform()
+        {
+                $this->load->library('ConfigWriter', 'config.php', 'configwriter');
+                $this->configwriter->write('index_page' , 'index2.php' );
+        }
 
-Where :
+If you checked your `applications/config/config.php` will see how the line `$config['index_page'] = 'index.php';`
+changed to `$config['index_page'] = 'index2.php';` magically!
 
-* **$config_file** (string) : The absolute path to the file where the array is declared. 
-* **$variable_name** (string) : The variable name of the array  to update. 
-* **$auto_save** (boolean) : Whether the library should automatically save the changes.
 
-We can start updating values:
+## Configuration options
 
-```
-$config_writer->write('key' , value );
-```
+There are some configuration options which you can pass to the library in an associative array when you
+performed in code  `$this->configwriter->init($config)` or by constructor like `$this->load->library('ConfigWriter', $config);`
 
-**Notes:** 
-* You can set value to any php variable type. 
-* The library treats numeric index "as is". Meaning '21' is different from 21
+* **file**: (string) This should be set to the file that you want to alter config array. It will default to `config.php`, each name will assume `applications/config/` as search path.
+* **variable_name** (string) : The variable name of the array  to update. It will default to `$config`.as in file of codeignoter in `config.php`.
+* **auto_save** (boolean) : Whether the library should automatically save the changes. It will default to `TRUE`.
 
-Supported variable Styles:
-
-1. Single index
-```php
- $config[ 'key'] = 'value' ;
-```
-
-2. Multi dimensional
-
-```php
-$config['key1']['key2'] = 'value';
-```
+## USAGE
 
 **note** You can not use the library to update the following format: 
 
 ```php
 $config = array( 'key' => 'value' );
 ```
+A complex code sample to change dinamically the database settings:
+
+```php
+    $init = array();
+    $init['file'] = 'database.php';
+    $init['variable_name'] = 'db';
+    $this->load->library('ConfigWriter', $initialization, 'configwriter');
+    $this->configwriter->write( array('default' , 'hostname') , 'my_hostname' );
+    $this->configwriter->write( array('default' , 'username') , 'my_username' );
+    $this->configwriter->write( array('default' , 'pconnet') , FALSE );
+```
 
 **Notes:** 
-* The library expect the variable to be indexed. 
-* The file can have other variables aside our target variable.
-
-## Examples
-
-**PHP File** config.php
-
-```php
-    /*
-    |--------------------------------------------------------------------------
-    | Site Name
-    |--------------------------------------------------------------------------
-    |
-    | 
-    |
-    */
-    $config[ 'site_name'] = 'Example Site';
-
-
-    /*
-    |--------------------------------------------------------------------------
-    |  Enable caching
-    |-------------------==-------------------------------------------------------
-    |
-    |
-    */
-    $config[ 'enable_caching'] = true;
-
-    /*
-    |--------------------------------------------------------------------------
-    |  Custom Array
-    |-------------------==-------------------------------------------------------
-    |
-    |
-    */
-    $config[ 'message'] = array(
-                                'title' => 'Welcome' ,
-                                 'body' => 'Thanks for your interest in the library'
-                            );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    |  Another Config Variable for the database 
-    |-------------------==-------------------------------------------------------
-    |
-    |
-    */
-    $db[ 'database'] =  '';
-    $db[ 'username'] =  '';
-```
-
-Create an instance of the library:
-
-```php
-    $config_writer = new Array_Config_Writer( APP_PATH.'config/config.php', 'config' );
-```
-
- Update a value by index. The *site_name* for instance:
- 
-```php
-    $config_writer->write('site_name' , "New Site Name' );
-```
-The file *config.php* should be updated
+* You can set value to any php variable type. 
+* The library treats numeric index "as is". Meaning '21' is different from 21
 
 ## Method chaining 
 
 ```php
-    $config_writer->write('site_name' , "New Site Name' )
-    ->write('enable_caching' , false );
+    $config_writer->write('site_name' , "New Site Name' )->write('enable_caching' , false );
 ```
-
 
 To update the `'message'` index which has array has value
 
@@ -159,9 +95,9 @@ $message = $config['message'];
 
     `$config_writer->write('message' , $message );`
     
-## Testing
-You need phpunit to run the test cases
+## Credits
 
-`$ phpunit`
+This is specific AD-HOC folk for Codeigniter-powered, see original project for.
 
-[Read More](http://hollax.github.io/ArrayConfigWriter)
+- Copyright © Wakeel Ogunsanya - https://github.com/hollax/ArrayConfigWriter
+
