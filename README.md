@@ -21,13 +21,10 @@ Download the library and extract it to `libraries` in your application.
 
 1. Copy the `application/libraries/ConfigWriter.php` file to `application/libraries/`
 2. Initialise the ConfigWriter library and include it in your controller or whatever. Example below:
-
-        public function myform()
-        {
+```
                 $this->load->library('ConfigWriter', 'config.php', 'configwriter');
                 $this->configwriter->write('index_page' , 'index2.php' );
-        }
-
+```
 If you checked your `applications/config/config.php` will see how the line `$config['index_page'] = 'index.php';`
 changed to `$config['index_page'] = 'index2.php';` magically!
 
@@ -35,7 +32,7 @@ changed to `$config['index_page'] = 'index2.php';` magically!
 ## Configuration options
 
 There are some configuration options which you can pass to the library in an associative array when you
-performed in code  `$this->configwriter->init($config)` or by constructor like `$this->load->library('ConfigWriter', $config);`
+performed in code  `$this->configwriter->initialize($config)` or by constructor like `$this->load->library('ConfigWriter', $config);`
 
 * **file**: (string) This should be set to the file that you want to alter config array. It will default to `config.php`, each name will assume `applications/config/` as search path.
 * **variable_name** (string) : The variable name of the array  to update. It will default to `$config`.as in file of codeignoter in `config.php`.

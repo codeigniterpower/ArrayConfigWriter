@@ -100,31 +100,69 @@ class ConfigWriter {
     protected $_autoSave = true ;
 
 
+    // --------------------------------------------------------------------
+
     /**
-     * 
-     * @param string $config_file Asolute path to config file
-     * @param string $variable_name the name of the config varible to update
+     * CI Singleton
+     *
+     * @var object
      */
-    public function __construct($config_file = NULL) 
+    protected $CI;
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Class constructor
+     *
+     * Loads the calendar language file and sets the default time reference.
+     *
+     * @uses	CI_Lang::$is_loaded
+     *
+     * @param	array	$config	Calendar options
+     * @return	void
+     */
+    public function __construct($config = NULL) 
+    {
+
+	$this->CI =& get_instance();
+
+	empty($config) OR $this->initialize($config);
+
+	log_message('info', 'ConfigWriter Class Initialized');
+
+    }
+    
+    // --------------------------------------------------------------------
+
+    /**
+     * Initialize the user preferences
+     *
+     * Accepts an associative array as input, containing display preferences
+     *
+     * @param	array	config preferences
+     * @return	CI_Calendar
+     */
+    public function initialize($config = array())
     {
         $this->_file = APPPATH .'config/config.php';
         $this->_autoSave = true ;
         $this->setVariableName('config');
-        if( is_array($config_file) )
+
+        if( is_array($config) )
         {
-            if (array_key_exists('file', $config_file))
-                $this->_file = APPPATH .'config/'.$config_file['file'];
-            if (array_key_exists('auto_save', $config_file))
-                $this->_autoSave = $config_file['auto_save'];
-            if (array_key_exists('variable_name', $config_file))
-                $this->setVariableName($config_file['variable_name'] );
+            if (array_key_exists('file', $config))
+                $this->_file = APPPATH .'config/'.$config['file'];
+            if (array_key_exists('auto_save', $config))
+                $this->_autoSave = $config['auto_save'];
+            if (array_key_exists('variable_name', $config))
+                $this->setVariableName($config['variable_name'] );
         }
         else
         {
-            if( isset($config_file) )
+            if( isset($config) )
                 $this->_file = APPPATH .'config/config.php';
             else
-                $this->_file = APPPATH .'config/'.$config_file;
+                $this->_file = APPPATH .'config/'.$config;
         }
         $this->_destinationFile = $this->_file ;
         
@@ -132,14 +170,14 @@ class ConfigWriter {
         {
             //throw new Exception('Config Write Error: Config file doesnt exists ' . $this->_file);
             $this->_lastError = 'Config Write Error: Config file doesnt exists ' . $this->_file ;
-        
-            return ;
+            log_message('warning', 'ConfigWriter error: config file not exist, using default' . $this->_file);
+            $this->_file = APPPATH .'config/config.php';
+            return $this;
         }
-
         $this->_fileContent =  file_get_contents( $this->_file ) ;
-        
+        return $this;
     }
-    
+
     
     /**
      * Wite or update an item of the config array
