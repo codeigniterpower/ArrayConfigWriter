@@ -1,11 +1,15 @@
 {
-    "name": "hollax/array-config-writer",
-    "description": "Library to update config array",
+    "name": " codeigniterpower/codeigniter-ArrayConfigWriter ",
+    "description": "Library to update config array values",
     "type": "library",
     "require-dev": {
     },
     "license": "GPLv2 or above",
     "authors": [
+        {
+            "name": "Wakeel Ogunsanya",
+            "email": "wakeel.oguns@gmail.com"
+        },
         {
             "name": "Wakeel Ogunsanya",
             "email": "wakeel.oguns@gmail.com"
