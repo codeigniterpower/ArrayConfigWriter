@@ -51,7 +51,7 @@ A complex code sample to change dinamically the database settings:
     $init = array();
     $init['file'] = 'database.php';
     $init['variable_name'] = 'db';
-    $this->load->library('ConfigWriter', $initialization, 'configwriter');
+    $this->load->library('ConfigWriter', $init, 'configwriter');
     $this->configwriter->write( array('default' , 'hostname') , 'my_hostname' );
     $this->configwriter->write( array('default' , 'username') , 'my_username' );
     $this->configwriter->write( array('default' , 'pconnet') , FALSE );
